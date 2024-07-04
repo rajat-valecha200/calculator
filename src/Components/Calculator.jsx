@@ -13,9 +13,17 @@ const Calculator = () => {
             setResult(null);
         } else if (value === '=') {
             try {
-                if (expression.trim() !== '' && !isOperator(expression.slice(-1)) && expression.split(/[+\-*\/]/).length >= 2) {
-                    const evaluatedResult = eval(expression);
-                    setResult(evaluatedResult.toString());
+
+                if (expression.trim() !== '' && !isOperator(expression.slice(-1)) && expression.split(/[+\-*]/).length >= 2) {
+                    if(isOperator(expression[0])){
+                        if(expression.split(/[+\-*]/).length>2){
+                            const evaluatedResult = eval(expression);
+                            setResult(evaluatedResult.toString());
+                        }
+                    } else {
+                        const evaluatedResult = eval(expression);
+                        setResult(evaluatedResult.toString());
+                    }
                 }
             } catch {
                 setResult('Error');
