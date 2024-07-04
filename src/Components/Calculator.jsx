@@ -25,9 +25,7 @@ const Calculator = () => {
                 if (isOperator(value) && (prev === '' || isOperator(prev.slice(-1)))) {
                     if (value === '-' && (prev === '' || isOperator(prev.slice(-1))) && prev.slice(-1)!==value) {
                         return prev + value;
-                    } else {
-                        return prev;
-                    }
+                    } 
                 } else {
                     return prev + value;
                 }
