@@ -13,7 +13,7 @@ const Calculator = () => {
             setResult(null);
         } else if (value === '=') {
             try {
-                if (expression) {
+                if (expression.trim() !== '' && !isOperator(expression.slice(-1)) && expression.split(/[+\-*\/]/).length >= 2) {
                     const evaluatedResult = eval(expression);
                     setResult(evaluatedResult.toString());
                 }
@@ -25,7 +25,9 @@ const Calculator = () => {
                 if (isOperator(value) && (prev === '' || isOperator(prev.slice(-1)))) {
                     if (value === '-' && (prev === '' || isOperator(prev.slice(-1))) && prev.slice(-1)!==value) {
                         return prev + value;
-                    } 
+                    } else {
+                        return prev;
+                    }
                 } else {
                     return prev + value;
                 }
