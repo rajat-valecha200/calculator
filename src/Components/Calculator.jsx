@@ -2,52 +2,53 @@ import { useState } from "react";
 import "./Calculator.css";
 
 const Calculator = () => {
-    const [expression, setExpression] = useState('');
+    const [firstOperand, setFirstOperand] = useState('');
+    const [secondOperand, setSecondOperand] = useState('');
+    const [operator, setOperator] = useState('');
     const [result, setResult] = useState(null);
-
-    const isOperator = (char) => ['+', '-', '*', '/'].includes(char);
 
     const handleClick = (value) => {
         if (value === 'C') {
-            setExpression('');
+            setFirstOperand('');
+            setSecondOperand('');
+            setOperator('');
             setResult(null);
         } else if (value === '=') {
             try {
-
-                if (expression.trim() !== '' && !isOperator(expression.slice(-1)) && expression.split(/[+\-*]/).length >= 2) {
-                    if(isOperator(expression[0])){
-                        if(expression.split(/[+\-*]/).length>2){
-                            const evaluatedResult = eval(expression);
-                            setResult(evaluatedResult.toString());
-                        }
-                    } else {
-                        const evaluatedResult = eval(expression);
-                        setResult(evaluatedResult.toString());
-                    }
+                if (firstOperand !== '' && operator !== '' && secondOperand !== '') {
+                    const expression = `${firstOperand}${operator}${secondOperand}`;
+                    const evaluatedResult = eval(expression.replace(/--/g, '+'));
+                    setResult(evaluatedResult.toString());
                 }
             } catch {
                 setResult('Error');
             }
+        } else if (['+', '-', '*', '/'].includes(value)) {
+            if (firstOperand !== '' && !operator) {
+                setOperator(value);
+            }
         } else {
-            setExpression((prev) => {
-                if (isOperator(value) && (prev === '' || isOperator(prev.slice(-1)))) {
-                    if (value === '-' && (prev === '' || isOperator(prev.slice(-1))) && prev.slice(-1)!==value) {
-                        return prev + value;
-                    } else {
-                        return prev;
-                    }
+            if (result !== null) {
+                setFirstOperand(value);
+                setSecondOperand('');
+                setOperator('');
+                setResult(null);
+            } else {
+                if (operator) {
+                    setSecondOperand((prev) => prev + value);
                 } else {
-                    return prev + value;
+                    setFirstOperand((prev) => prev + value);
                 }
-            });
-            setResult(null);
+            }
         }
     };
+
+    const displayExpression = `${firstOperand}${operator}${secondOperand}`;
 
     return (
         <div className="calculator">
             <h1>React Calculator</h1>
-            <input type="text" value={expression} readOnly />
+            <input type="text" value={displayExpression} readOnly />
             {result && <p className="result">{result}</p>}
             <div className="btn-row">
                 {['7', '8', '9', '+'].map(value => (
