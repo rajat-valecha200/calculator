@@ -19,6 +19,8 @@ const Calculator = () => {
                     const expression = `${firstOperand}${operator}${secondOperand}`;
                     const evaluatedResult = eval(expression.replace(/--/g, '+'));
                     setResult(evaluatedResult.toString());
+                } else {
+                    setResult('Error');
                 }
             } catch {
                 setResult('Error');
